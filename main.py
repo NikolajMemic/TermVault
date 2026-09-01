@@ -1,8 +1,10 @@
 import json
 
-with open("tasks.json", "r") as file:
-    notes = json.load(file)
-
+try:
+    with open("tasks.json", "r") as file:
+        notes = json.load(file)
+except:
+    notes = []
 
 def isValid(choice):
     if choice < 1 or choice > 5:
@@ -16,20 +18,29 @@ def addNote():
 
 
 def listNote():
-    i = 1
-    for note in notes:
-        print(f"{i}. {note}")
-        i += 1
+    if(len(notes) == 0):
+        print("No notes to list ): ")
+    else:
+        i = 1
+        for note in notes:
+            print(f"{i}. {note}")
+            i += 1
 
 
 def deleteNote():
-    note = int(input("Delete the note: "))
 
-    try:
-        notes.remove(notes[note - 1])
-    except:
-        print()
-        print(f"Note number '{note}' doesn't exist")
+    if(len(notes) == 0):
+        print("Nothing to delete :/ ")
+    else:    
+        note = int(input("Delete the note: "))
+        try:
+            noteNumber = note
+            noteName = notes[note - 1]
+            notes.remove(notes[note - 1])
+            print(f"Successfully deleted note number {noteNumber}: '{noteName}'")
+        except:
+            print()
+            print(f"Note number '{note}' doesn't exist")
 
 
 def saveTasks():
@@ -37,7 +48,7 @@ def saveTasks():
         json.dump(notes, file)
 
 
-while True:
+while 1:
     print("Press 1 to add a note")
     print("Press 2 to delete a note")
     print("Press 3 to list the notes")
@@ -45,9 +56,15 @@ while True:
     print("Press 5 to quit the program")
 
     print()
-
-    choice = int(input("Select a number from 1 to 5: "))
-
+    while 1:
+        try:
+            choice = int(input("Select a number from 1 to 5: "))
+            break
+        except ValueError:
+            print("This isn't a correct option")
+        except:
+            print("How tf did you get here")
+   
     print()
 
     if isValid(choice):
